@@ -1,0 +1,9 @@
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\BITalinoAPI\BITalinoAPI\bin\x64\Debug\BITalinoAPI.exe.config
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\BITalinoAPI\BITalinoAPI\bin\x64\Debug\BITalinoAPI.exe
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\BITalinoAPI\BITalinoAPI\bin\x64\Debug\BITalinoAPI.pdb
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\BITalinoAPI\BITalinoAPI\bin\x64\Debug\BITalino_x64.dll
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\BITalinoAPI\BITalinoAPI\bin\x64\Debug\BITalino_x64.xml
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\BITalinoAPI\BITalinoAPI\obj\x64\Debug\BITalinoAPI.csproj.CoreCompileInputs.cache
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\BITalinoAPI\BITalinoAPI\obj\x64\Debug\BITalinoAPI.csproj.CopyComplete
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\BITalinoAPI\BITalinoAPI\obj\x64\Debug\BITalinoAPI.exe
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\BITalinoAPI\BITalinoAPI\obj\x64\Debug\BITalinoAPI.pdb
