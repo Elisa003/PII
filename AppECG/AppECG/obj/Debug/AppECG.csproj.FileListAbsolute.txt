@@ -8,3 +8,13 @@ C:\Users\eggue\Documents\Cours\ENSC\2A\PII\AppECG\AppECG\bin\Debug\AppECG.exe
 C:\Users\eggue\Documents\Cours\ENSC\2A\PII\AppECG\AppECG\bin\Debug\AppECG.pdb
 C:\Users\eggue\Documents\Cours\ENSC\2A\PII\AppECG\AppECG\obj\Debug\AppECG.exe
 C:\Users\eggue\Documents\Cours\ENSC\2A\PII\AppECG\AppECG\obj\Debug\AppECG.pdb
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\bin\Debug\AppECG.exe.config
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\bin\Debug\AppECG.exe
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\bin\Debug\AppECG.pdb
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\obj\Debug\AppECG.csprojAssemblyReference.cache
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\obj\Debug\AppECG.Form1.resources
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\obj\Debug\AppECG.Properties.Resources.resources
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\obj\Debug\AppECG.csproj.GenerateResource.cache
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\obj\Debug\AppECG.csproj.CoreCompileInputs.cache
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\obj\Debug\AppECG.exe
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\AppECG\obj\Debug\AppECG.pdb

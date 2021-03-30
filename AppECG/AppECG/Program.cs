@@ -10,7 +10,7 @@ namespace AppECG
 {
     static class Program
     {
-        static int longueurECG = 5000;
+        static int longueurECG = 8000;
         static public int[] lectureRawECG()
         {
             int[] rawECG = new int[longueurECG];
