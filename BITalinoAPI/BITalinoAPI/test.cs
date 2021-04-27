@@ -4,7 +4,7 @@ using System.Text;
 
 class Program
 {
-
+    /*
     static public string[] lectureRawECG()
     {
         int longueurECG = 1000;
@@ -32,16 +32,13 @@ class Program
 
         return rawECG;
 
-    }
-    /*
+    }*/
+    
     static void Main(string[] args)
     {
         try
         {
-            string[] rawECG = lectureRawECG();
-            foreach (string raw in rawECG)
-                Console.WriteLine(raw);
-
+           
 
             // uncomment this block to search for Bluetooth devices
             /*
@@ -49,7 +46,7 @@ class Program
             foreach (Bitalino.DevInfo d in devs)
                Console.WriteLine("{0} - {1}", d.macAddr, d.name);
             return;
-            
+            */
 
             Console.WriteLine("Connecting to device...");
 
@@ -101,5 +98,5 @@ class Program
         }
 
 
-    }*/
+    }
 }

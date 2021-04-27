@@ -117,4 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="numericChartRangeControlClient1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="label11.Text" xml:space="preserve">
+    <value>Cette application a été créée dans le cadre d'un projet informatique individuel à l'Ecole Nationale Supérieure de Cognitique. Cette application vous permet de réaliser un électrocardiogramme (ECG) grâce à 3 électrodes placées sur la poitrine et à une carte électronique qui enregistrent le signal. Une fois l'acquisition réalisée, l'application détecte s'il s'agit d'un ECG stressé ou non.</value>
+  </data>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>25</value>
+  </metadata>
 </root>

@@ -1,0 +1,9 @@
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\Bitalino\bin\Debug\Bitalino.exe.config
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\Bitalino\bin\Debug\Bitalino.exe
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\Bitalino\bin\Debug\Bitalino.pdb
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\Bitalino\bin\Debug\BITalino_x64.dll
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\Bitalino\obj\Debug\BitalinoAcquisition.csprojAssemblyReference.cache
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\Bitalino\obj\Debug\BitalinoAcquisition.csproj.CoreCompileInputs.cache
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\Bitalino\obj\Debug\BitalinoAcquisition.csproj.CopyComplete
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\Bitalino\obj\Debug\Bitalino.exe
+C:\Users\eggue\Documents\Cours\ENSC\2A\PII\PII\AppECG\Bitalino\obj\Debug\Bitalino.pdb

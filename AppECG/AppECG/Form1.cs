@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -8,222 +7,258 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-
+using DevExpress.XtraEditors;
+using DevExpress.XtraCharts;
+using Series = System.Windows.Forms.DataVisualization.Charting.Series;
+//using Series = System.Windows.Forms.DataVisualization.Charting.Series;
 
 namespace AppECG
 {
     public partial class Form1 : Form
     {
-        int[] rawECG;
+        string fichierTxt = string.Empty;
+        double[] rawECG;
         double[] signal_mV;
         double[] denoisingECG;
-        static int debutECG = 3000;
-        static int finECG = 7500;
+        Dictionary<double, double> pics = new Dictionary<double, double>();
+
+        static public double minSelected;
+        static public double maxSelected;
+
+        double sdnn;
+        double rmssd;
+        double skew;
+
+
         public Form1()
         {
             InitializeComponent();
+        }
+        private void btnSignalNonStresse_Click(object sender, EventArgs e)
+        {
+            fichierTxt = "signals_math";
+            CalculMesures.debutECG = 3000;
+            CalculMesures.finECG = 7500;
+            CalculMesures.intervalPic = 100;
+            TraitementDonnees.longueurECG = 8000;
 
-            AffichageRawECG();
-            AffichageECGmV();
-            AffichageDenoisingECG();
+            rawECG = TraitementDonnees.lectureRawECG(fichierTxt);
+            TraitementSignal(rawECG);
+            rbSignalBrut.Checked = true;
+            AffichageChartControl(rawECG);
+        }
+        private void btnSignalStresse_Click(object sender, EventArgs e)
+        {
+            fichierTxt = "signals_leo"; // A CHANGER
+            CalculMesures.debutECG = 58110;
+            CalculMesures.finECG = 61600;
+            CalculMesures.intervalPic = 75;
+            TraitementDonnees.longueurECG = 62100;
 
-
-            double[] ecg = Program.TransferFunction(rawECG);
-
-            foreach (double pic in DetectPic(ecg))
-            {
-                picTrouvé.Text += "pic : " + pic.ToString() + "   ";
-            }
-
-            tbSDNN.Text = SDNN(DetectPic(ecg)).ToString();
-            tbRMSSD.Text = RMSSD(DetectPic(ecg)).ToString();
-            tbSkew.Text = Skew(ecg).ToString();
+            rawECG = TraitementDonnees.lectureRawECG(fichierTxt);
+            TraitementSignal(rawECG);
+            rbSignalBrut.Checked = true;
+            AffichageChartControl(rawECG);
         }
 
-        void AffichageRawECG()
+        public void TraitementSignal(double[] ecg)
         {
-            // Affichage du signal ECG brut
-            rawECG = Program.lectureRawECG();
-
-            //////// CHART 1 /////////
-
-            this.chart1.Series.Clear();
-
-            this.chart1.Titles.Add("ECG");
-
-            chart1.Series.Clear();
-
-            string seriesName = "raw ECG";
-            Series serie = chart1.Series.Add(seriesName);
-
-            serie.ChartArea = chart1.ChartAreas[0].Name;
-            serie.Name = seriesName;
-            serie.ChartType = SeriesChartType.Stock;
-
-            //fenetre à faire varier
-            for (int i = debutECG; i < finECG; i++)
+            if (ecg != null)
             {
-                serie.Points.AddXY(i, rawECG[i]);
-            }
-            serie.ChartType = SeriesChartType.Spline;
-        }
+                signal_mV = TraitementDonnees.TransferFunction(ecg);
+                denoisingECG = TraitementDonnees.dwt(signal_mV);
+                pics = CalculMesures.DetectPicBIS(signal_mV);
 
-        void AffichageECGmV()
-        {
-            // Affichage du signal ECG en mV
-            signal_mV = Program.TransferFunction(rawECG);
+                sdnn = Math.Round(CalculMesures.SDNN(pics), 3);
+                rmssd = Math.Round(CalculMesures.RMSSD(pics), 3);
+                skew = Math.Round(CalculMesures.Skew(signal_mV), 3);
 
-            //////// CHART 2 /////////
-            this.chart2.Series.Clear();
-
-            this.chart2.Titles.Add("ECG");
-
-            chart2.Series.Clear();
-
-            string seriesName2 = "ECG in mV";
-            Series serie2 = chart2.Series.Add(seriesName2);
-
-            serie2.ChartArea = chart2.ChartAreas[0].Name;
-            serie2.Name = seriesName2;
-            serie2.ChartType = SeriesChartType.Stock;
-
-            for (int i = debutECG; i < finECG; i++)
-            {
-                serie2.Points.AddXY(i, signal_mV[i]);
-            }
-
-            serie2.ChartType = SeriesChartType.Spline;
-        }
-
-        void AffichageDenoisingECG()
-        {
-            //Affichage du signal ECG débruité
-            denoisingECG = Program.dwt(signal_mV);
-
-            //////// CHART 3 /////////
-            this.chart3.Series.Clear();
-
-            this.chart3.Titles.Add("ECG");
-
-            chart3.Series.Clear();
-
-            string seriesName3 = "denoising ECG";
-            Series serie3 = chart3.Series.Add(seriesName3);
-
-            serie3.ChartArea = chart3.ChartAreas[0].Name;
-            serie3.Name = seriesName3;
-            serie3.ChartType = SeriesChartType.Stock;
-
-            for (int i = debutECG; i < finECG; i++)
-            {
-                serie3.Points.AddXY(i, denoisingECG[i]);
-            }
-
-            serie3.ChartType = SeriesChartType.Spline;
-        }
-
-
-        public double[] DetectPic(double[] ecg)
-        {
-            double[] pics = new double[50];
-
-            int debut = 3199;
-            int cpt = 0;
-
-            do
-            {
-                int finSeq = debut + 100;
-
-                double pic = 0;
-
-                for (int i = debut; i < finSeq; i++)
+                // SDNN
+                if (VerifDouble(sdnn))
+                    tbSDNN.Text = sdnn.ToString();
+                else
                 {
-                    if (ecg[i] > pic)
-                        pic = ecg[i];
+                    tbSDNN.Text = "Non calculé";
+                    lbSDNNcorrect.Text = "Le signal donné ne permet pas un calcul optimal";
+                    lbSDNNcorrect.ForeColor = Color.Black;
                 }
-                pics[cpt] = pic;
-                cpt++;
-                debut = finSeq;
+
+                // RMSSD
+                if (VerifDouble(rmssd))
+                    tbRMSSD.Text = rmssd.ToString();
+                else
+                {
+                    tbRMSSD.Text = "Non calculé";
+                    lbRMSSDcorrect.Text = "Le signal donné ne permet pas un calcul optimal";
+                    lbRMSSDcorrect.ForeColor = Color.Black;
+                }
+
+                // SKEW
+                if (VerifDouble(skew))
+                    tbSkew.Text = skew.ToString();
+                else
+                {
+                    tbSkew.Text = "Non calculé";
+                    lbSkewCorrect.Text = "Le signal donné ne permet pas un calcul optimal";
+                    lbSDNNcorrect.ForeColor = Color.Black;
+                }
+                ECGstresseOUnon();
             }
-            while (debut < finECG);
-
-            return pics;
-        }
-
-        public double SDNN(double[] pics)
-        {
-            int longueurPics = 44;
-            double somme = 0;
-
-            for (int i = 0; i < longueurPics - 1; i++)
+            else
             {
-                double ecart = pics[i + 1] - pics[i];
-                double moy = (pics[i + 1] + pics[i]) / 2;
-                somme += Math.Pow(ecart - moy, 2);
+                MessageBox.Show("Erreur");
             }
 
-            return Math.Sqrt((1.0 / (longueurPics - 2)) * somme);
         }
 
-        public double RMSSD(double[] pics)
+        public bool VerifDouble(double var)
         {
-            int longueurPics = 44;
-            double somme = 0;
+            if (double.IsNaN(var) || double.IsInfinity(var))
+                return false;
+            else return true;
+        }
 
-            for (int i = 0; i < longueurPics - 2; i++)
+        public void AffichageChartControl(double[] signal)
+        {
+            if (signal != null)
             {
-                double ecart1 = pics[i + 2] - pics[i + 1];
-                double ecart2 = pics[i + 1] - pics[i];
-                somme += Math.Pow(ecart1 - ecart2, 2);
+                chartControl1.Series.Clear();
+                chartControl1.SeriesDataMember = string.Empty;
+                chartControl1.SeriesTemplate.ArgumentDataMember = string.Empty;
+
+                DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series("ECG", ViewType.Line);
+
+                for (int i = CalculMesures.debutECG; i < CalculMesures.finECG; i++)
+                {
+                    series1.Points.Add(new SeriesPoint(i, signal[i]));
+                }
+                chartControl1.Series.Add(series1);
+                XYDiagram diagram = (XYDiagram)chartControl1.Diagram;
+
+                // Enable the diagram's scrolling.
+                diagram.EnableAxisXScrolling = true;
+                diagram.EnableAxisYScrolling = true;
+                diagram.EnableAxisXZooming = true;
+                diagram.EnableAxisYZooming = false;
+
+                diagram.AxisX.WholeRange.Auto = true;
+                diagram.AxisY.WholeRange.Auto = true;
+
+                diagram.AxisX.VisualRange.AutoSideMargins = false;
+
+                diagram.AxisX.VisualRange.Auto = false;
+                diagram.AxisY.WholeRange.Auto = false;
             }
-
-            return Math.Sqrt((1.0 / (longueurPics - 2)) * somme);
-        }
-
-        public double Skew(double[] ecg)
-        {
-            double longueurECG = finECG - debutECG;
-            double skew = 0.0d;
-            for (int i = debutECG; i < finECG; i++)
+            else
             {
-                skew += Math.Pow((ecg[i] - Mean(ecg)) / Sd(ecg), 3);
+                MessageBox.Show("Erreur");
             }
-            return longueurECG / (longueurECG - 1) / (longueurECG - 2) * skew;
+
         }
 
-        public double Mean(double[] ecg)
+        public void ECGstresseOUnon()
         {
-            double mean = 0;
-            for (int i = debutECG; i < finECG; i++)
+            // SDNN
+            if (sdnn > 20 ) // ECG normal 
             {
-                mean += ecg[i];
+                lbSDNNcorrect.Text = "ECG normal car > 20";
+                lbSDNNcorrect.ForeColor = Color.Green;
             }
-            return mean / (finECG - debutECG);
-        }
-
-        public double Variance(double[] ecg, double mean)
-        {
-            double variance = 0;
-
-            for (int i = debutECG; i < finECG; i++)
+            else // ECG stressé 
             {
-                variance += Math.Pow((ecg[i] - mean), 2);
+                lbSDNNcorrect.Text = "ECG stressé car < 20";
+                lbSDNNcorrect.ForeColor = Color.Orange;
             }
 
-            int n = finECG - debutECG;
-            if (debutECG > 0)
-                n -= 1;
+            //RMSSD
+            if (rmssd > 30) // ECG normal 
+            {
+                lbRMSSDcorrect.Text = "ECG normal car > 30";
+                lbRMSSDcorrect.ForeColor = Color.Green;
+            }
+            else // ECG stressé 
+            {
+                lbRMSSDcorrect.Text = "ECG stressé car < 30";
+                lbRMSSDcorrect.ForeColor = Color.Orange;
+            }
 
-            return variance / (n);
+            //SKEW
+            if (skew < 2.5) // ECG normal
+            {
+                lbSkewCorrect.Text = "ECG normal car < 2.5";
+                lbSkewCorrect.ForeColor = Color.Green;
+            }
+            else // ECG stressé
+            {
+                lbSkewCorrect.Text = "ECG stressé car > 2.5";
+                lbSkewCorrect.ForeColor = Color.Orange;
+            }
         }
 
-        public double Sd(double[] ecg)
+
+        private void btnSelectionSegment_Click(object sender, EventArgs e)
         {
-            double mean = Mean(ecg);
-            double variance = Variance(ecg, mean);
+            if (rawECG != null)
+            {
+                XYDiagram diagram = (XYDiagram)chartControl1.Diagram;
 
-            return Math.Sqrt(variance);
+                tbMinSelected.Text = Math.Round((double)diagram.AxisX.VisualRange.MinValue,3).ToString();
+                minSelected = double.Parse(tbMinSelected.Text);
+
+                tbMaxSelected.Text = Math.Round((double)diagram.AxisX.VisualRange.MaxValue,3).ToString();
+                maxSelected = double.Parse(tbMaxSelected.Text);
+
+                CalculMesures.debutECG = (int)minSelected;
+                CalculMesures.finECG = (int)maxSelected;
+
+                TraitementSignal(rawECG);
+            }
+            else
+            {
+                MessageBox.Show("Erreur");
+            }
         }
 
+
+        private void rbSignalBrut_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rawECG != null)
+            {
+                if (rbSignalBrut.Checked)
+                    AffichageChartControl(rawECG);
+            }
+            else
+            {
+                MessageBox.Show("Erreur");
+            }
+        }
+
+
+        private void rbSignalEtalonne_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rawECG != null)
+            {
+                if (rbSignalEtalonne.Checked)
+                    AffichageChartControl(signal_mV);
+            }
+            else
+            {
+                MessageBox.Show("Erreur");
+            }
+        }
+
+        private void btnCommencerAcquisition_Click(object sender, EventArgs e)
+        {
+            Form2 FormAcquisition = new Form2();
+            FormAcquisition.Show();
+            btnAffichageAcquisition.Visible = true;
+        }
+
+        private void btnAffichageAcquisition_Click(object sender, EventArgs e)
+        {
+            rawECG = Form2.ecgBitalino;
+            AffichageChartControl(rawECG);
+            btnAffichageAcquisition.ForeColor = Color.Black;
+        }
     }
 }

@@ -59,5 +59,15 @@ namespace AppECG.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ecg_placement_triangle {
+            get {
+                object obj = ResourceManager.GetObject("ecg_placement_triangle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

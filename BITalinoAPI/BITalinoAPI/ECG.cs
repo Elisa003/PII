@@ -37,21 +37,5 @@ namespace BITalinoAPI
             return rawECG;
 
         }
-
-        static void Main(string[] args)
-        {
-            try
-            {
-                string[] rawECG = lectureRawECG();
-                foreach (string raw in rawECG)
-                    Console.WriteLine(raw);
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("ça marche pas " + e);
-            }
-        }
-
-
     }
 }
